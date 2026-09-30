@@ -5,47 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP to Binary Converter</title>
     <style>
+        :root {
+            --bg: #f4f4f9;
+            --text: #222;
+            --card: #ffffff;
+            --border: #ccc;
+            --input-bg: #ffffff;
+            --button: #007bff;
+            --button-hover: #0056b3;
+            --success: green;
+            --error: red;
+        }
+
+        body.dark {
+            --bg: #111827;
+            --text: #f3f4f6;
+            --card: #1f2937;
+            --border: #4b5563;
+            --input-bg: #111827;
+            --button: #2563eb;
+            --button-hover: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f9;
+            background-color: var(--bg);
+            color: var(--text);
             padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
-        input[type="text"], button {
+
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 12px;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        h1 {
+            margin-top: 45px;
+        }
+
+        input[type="text"],
+        button {
             padding: 10px;
             margin: 10px;
             border-radius: 5px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border);
             font-size: 16px;
         }
+
+        input[type="text"] {
+            background-color: var(--input-bg);
+            color: var(--text);
+            width: min(320px, 90%);
+        }
+
         button {
-            background-color: #007bff;
+            background-color: var(--button);
             color: white;
             cursor: pointer;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background-color: var(--button-hover);
         }
-        .output, .section {
+
+        .output,
+        .section {
             margin-top: 20px;
             padding: 10px;
             font-size: 18px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border);
             border-radius: 5px;
-            background-color: #ffffff;
+            background-color: var(--card);
             display: inline-block;
         }
+
+        .output {
+            max-width: 100%;
+        }
+
         .section {
             font-size: 16px;
             margin: 10px;
         }
+
+        #fullBinary {
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .theme-toggle {
+                position: static;
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                margin-top: 10px;
+            }
+
+            .output {
+                width: 100%;
+            }
+
+            .section {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+
     <h1>IP to Binary Converter</h1>
     <p>Enter an IP address below to see its binary representation:</p>
+
     <input type="text" id="ipInput" placeholder="Enter IP Address">
     <button onclick="convertToBinary()">Convert</button>
+
     <div class="output" id="binaryOutput">
         <p id="fullBinary"></p>
         <button onclick="copyToClipboard('fullBinary')">Copy Full Binary</button>
@@ -54,8 +145,7 @@
 
     <script>
         function convertToBinary() {
-            const ip = document.getElementById("ipInput").value;
-            const outputDiv = document.getElementById("binaryOutput");
+            const ip = document.getElementById("ipInput").value.trim();
             const fullBinaryP = document.getElementById("fullBinary");
             const sectionsDiv = document.getElementById("binarySections");
 
@@ -65,20 +155,21 @@
 
             // Validate IP address format
             const ipRegex = /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}$/;
+
             if (!ipRegex.test(ip)) {
                 fullBinaryP.textContent = "Invalid IP address. Please try again.";
-                fullBinaryP.style.color = "red";
+                fullBinaryP.style.color = "var(--error)";
                 return;
             }
 
             // Convert IP to binary
             const binaryOctets = ip.split('.').map(octet => {
-                return parseInt(octet).toString(2).padStart(8, '0');
+                return parseInt(octet, 10).toString(2).padStart(8, '0');
             });
 
             const binaryRepresentation = binaryOctets.join('.');
             fullBinaryP.textContent = binaryRepresentation;
-            fullBinaryP.style.color = "green";
+            fullBinaryP.style.color = "var(--success)";
 
             // Break down into sections
             binaryOctets.forEach((binary, index) => {
@@ -96,9 +187,34 @@
         function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);
             const textToCopy = element.textContent || element.innerText;
+
             navigator.clipboard.writeText(textToCopy)
                 .then(() => alert("Copied to clipboard!"))
                 .catch(err => alert("Failed to copy: " + err));
+        }
+
+        function applyTheme(theme) {
+            const isDark = theme === "dark";
+            document.body.classList.toggle("dark", isDark);
+
+            const themeToggle = document.getElementById("themeToggle");
+            themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+        }
+
+        function toggleTheme() {
+            const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
+            localStorage.setItem("ipBinaryTheme", newTheme);
+            applyTheme(newTheme);
+        }
+
+        const savedTheme = localStorage.getItem("ipBinaryTheme");
+
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            const prefersDark = window.matchMedia &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(prefersDark ? "dark" : "light");
         }
     </script>
 </body>
