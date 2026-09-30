@@ -10,65 +10,45 @@
 </p>
 
 <p align="center">
-  <img src="ip-to-binary-demo.gif" width="750"/>
+  <img src="https://github.com/tcdoverlord/IP-to-Binary-Converter/blob/main/iptobinaryconvertervid.gif" width="1080" alt="IP to Binary Converter Demo"/>
 </p>
 
 ---
 
 ## 📌 Overview
 
-The IP to Binary Converter is a lightweight web-based tool that converts IPv4 addresses into their binary equivalents.
+**IP to Binary Converter** is a lightweight, browser-based tool that converts IPv4 addresses into their binary equivalents.
 
-It is designed to help learners and developers understand how IP addressing works at the binary level in a simple, interactive way.
+It is designed to help learners and developers understand how IP addressing works at the binary level through a simple, interactive interface.
+
+Each IPv4 octet is converted into an **8-bit binary value**, providing a clear view of the decimal-to-binary relationship used in IPv4 addressing.
 
 ---
 
 ## 🎬 Demo
 
-The GIF above demonstrates real-time IPv4 → binary conversion.
+The GIF above demonstrates IPv4 → binary conversion and the ability to copy the complete binary result or individual binary sections.
 
 ---
 
 ## ✨ Features
 
-- IPv4 → Binary conversion (8-bit per octet)
-- Copy full binary output or individual sections
-- Input validation for correct IPv4 format
+- IPv4 → Binary conversion
+- 8-bit binary output for each octet
+- Copy full binary output
+- Copy individual binary sections
+- IPv4 input validation
 - Instant conversion results
-- Clean and responsive UI
+- Clean browser-based interface
+- No backend required
+- No installation required
+- Light and dark mode
 
 ---
 
-## 🚀 Usage
+## 🧮 Example
 
-1. Open `IP-to-Binary-Converter.html` in your browser  
-2. Enter an IPv4 address (example: 8.8.8.8)  
-3. Click Convert  
-4. Copy full or partial binary output  
+Enter:
 
----
-
-## 📁 Project Structure
-
-IP-to-Binary-Converter/
-│
-├── IP-to-Binary-Converter.html
-├── style.css
-├── script.js
-├── README.md
-└── ip-to-binary-demo.gif
-
----
-
-## 🔮 Future Enhancements
-
-- IPv6 support  
-- Binary ↔ Decimal ↔ Hex toggle  
-- Dark mode UI  
-- Subnet calculator mode  
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
+```text
+8.8.8.8
